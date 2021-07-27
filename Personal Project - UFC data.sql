@@ -1,5 +1,5 @@
 -- PERSONAL PROJECT
--- ANALYSIS OF UFC DATA FOR FOR THE PERIOD OF March, 1994 - March, 2021
+-- ANALYSIS OF UFC DATA FOR THE PERIOD OF March, 1994 - March, 2021
 -- v0.01 27/07/2021
 
 -- Let's explore the data, find out fighter's most basic statistics - Wins | Loses | Draws | Win % | Loss %
