@@ -4,7 +4,7 @@
 
 -- Let's explore the data, find out fighter's most basic statistics - Wins | Loses | Draws | Win % | Loss %
 
-WITH W AS (         --Let's Create list of all fight's and it's winner. Gonna save it as view vwWinners as well for further refference
+WITH W AS (         --Let's Create list of all fight's and it's winner. Gonna save it as view vwWinners as well for further reference.
 SELECT 
 R_FIGHTER,
 B_FIGHTER,
@@ -21,7 +21,7 @@ WHEN WINNER = 'BLUE' THEN B_FIGHTER
 WHEN WINNER = 'RED' THEN R_FIGHTER
 ELSE 'DRAW' END AS WINNER
 FROM DBO.[123]
-), W_N AS           --Counting Wins/Loses/Draws for 5 figters with most wins
+), W_N AS           --Counting Wins/Loses/Draws for 5 figters with most wins.
 (
 SELECT TOP 5 WITH TIES
 R_FIGHTER AS Fighter,
@@ -31,7 +31,7 @@ COUNT(CASE WHEN WINNER = 'DRAW' THEN 1 END) AS Draws
 FROM W
 GROUP BY R_FIGHTER
 ORDER BY WINS DESC
-)                     --Adding some more Details
+)                     --Adding some more Details.
 SELECT
 Fighter,
 Wins,
@@ -42,9 +42,9 @@ CAST(((Loses * 1.00) / ((WINS * 1.00)+(Loses*1.00))*100) AS numeric(4,2)) AS 'Pr
 FROM W_N
 
 --It clearly appears that the Coloradan Cowboy has scored most wins in the UFC history, but can he be considered the most accomplished fighter?
---Let's leave it for a moment
+--Let's leave it for a moment.
 
--- Now, it's time to find out who has the best Win-Loss ratio
+-- Now, it's time to find out who has the best Win-Loss ratio.
 WITH WR AS (
 SELECT
 R_FIGHTER,
@@ -70,7 +70,7 @@ ORDER BY [Prc Won] DESC
 -- Obviously, It's Kamaru Usman and Khabib Nurmagomedov who won all their fights so far!
 -- And since Khabib has decided to retire with 29/0 (13/0 in UFC) record, we can assume that The Nigerian Nightmare is the TOP OF THE TOP right now.
 
--- Now, let's find out who has the longest winning streak in the UFC
+-- Now, let's find out who has the longest winning streak in the UFC.
 WITH L AS (                                     
 SELECT                                          
 [DATE], 
@@ -96,15 +96,15 @@ SELECT
 R_FIGHTER,
 B_fighter,
 winner,
-SUM(CASE WHEN winner <> R_fighter THEN 1 END)   -- starts with null, ADD +1 when Fighter loses - streak bronken
+SUM(CASE WHEN winner <> R_fighter THEN 1 END)   -- starts with null, ADD +1 when Fighter loses - streak bronken.
 OVER (PARTITION by R_FIGHTER ORDER BY [date] ) TMP
 FROM L) 
 SELECT
 R_FIGHTER,
 COUNT(*) AS STREAK
 FROM M
-WHERE R_fighter = WINNER                           -- List of consecutive win streaks of each fighter
+WHERE R_fighter = WINNER                           -- List of consecutive win streaks of each fighter.
 group BY R_fighter, TMP                         
 ORDER BY STREAK DESC
--- It's Anderson Silva! Even though lately he's having some rough time, being undefited for 16 consecutive fights is something clearly out of this world.
+-- It's Anderson Silva! Even though lately he's having some rough time, being undefeated for 16 consecutive fights is something clearly out of this world.
 
