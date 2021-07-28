@@ -188,6 +188,44 @@ FROM S
 GROUP BY Fighter
 order by MAX([Total wins by Submission]) DESC
 
+-- Lets take a look on best grapplers average stats in fights won by submission.
+WITH sub AS(
+SELECT
+R_fighter AS Fighter,
+R_win_by_Submission AS [Total wins by Submission],
+ISNULL(R_avg_SUB_ATT,0) AS [Submission attempts],
+ISNULL(R_avg_TD_ATT, 0) AS [Takedowns attempts],
+ISNULL(R_avg_TD_landed, 0) AS [Takedowns landed],
+ISNULL(R_avg_GROUND_att,0) as [Ground attacks],
+ISNULL(R_avg_GROUND_landed,0) as [Ground attacks landed],
+ISNULL(R_avg_CTRL_time_seconds,0) [Ground control time]
+FROM [dbo].[123]
+WHERE R_fighter IN (SELECT fighter from vwSub) 
+UNION
+SELECT
+B_fighter AS Fighter,
+B_win_by_Submission AS [Total wins by Submission],
+ISNULL(B_avg_SUB_ATT,0) AS [Submission attempts],
+ISNULL(B_avg_TD_ATT, 0) AS [Takedowns attempts],
+ISNULL(B_avg_TD_landed, 0) AS [Takedowns landed],
+ISNULL(B_avg_GROUND_att,0) as [Ground attacks],
+ISNULL(B_avg_GROUND_landed,0) as [Ground attacks landed],
+ISNULL(B_avg_CTRL_time_seconds,0) [Ground control time]
+FROM [dbo].[123]
+WHERE B_fighter IN (SELECT fighter from vwSub)
+) SELECT DISTINCT 
+FIGHTER,
+MAX([Total wins by Submission]) [Total wins by Submission],
+CAST(AVG([Takedowns attempts]) AS numeric(4,2)) [Takedowns attempts],
+CAST(AVG([Takedowns landed]) AS numeric(4,2)) [Takedowns landed],
+CAST(AVG([Submission attempts]) AS numeric(4,2)) [Submission attempts],
+CAST(AVG([Ground attacks]) AS numeric(4,2)) [Ground attacks],
+CAST(AVG([Ground attacks landed]) AS numeric(4,2)) [Ground attacks landed],
+CAST(AVG([Ground control time]) AS numeric(5,2)) [Ground control time]
+FROM SUB
+GROUP BY Fighter
+ORDER BY [Total wins by Submission] DESC, Fighter;
+
 -- Let's look closer at each weightclass
 SELECT
 weight_class,
@@ -195,3 +233,15 @@ COUNT(*) [No. of fights]
 FROM [dbo].[123]
 GROUP BY weight_class
 ORDER BY [No. of fights] desc
+-- It appears that welterweight and lightweight is the most popular. Note that fighter during his/her career can fight in multiple categories.
+
+-- Basic data of average fighter in each class. 
+SELECT
+weight_class,
+CAST(AVG(R_age + B_age) / 2 AS numeric(4,2)) AS Age,
+CAST(AVG(R_Height_cms + B_Weight_lbs) / 2 AS numeric (5,2)) AS Height,
+CAST(AVG((R_Weight_lbs / 2.205) + (B_Weight_lbs / 2.205)) / 2.0 AS numeric(5,2)) AS Weight
+FROM [dbo].[123]
+GROUP BY weight_class
+ORDER BY Weight desc
+
