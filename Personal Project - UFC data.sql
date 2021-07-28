@@ -167,3 +167,23 @@ GROUP BY B_fighter, B_win_by_KO_TKO, B_win_by_TKO_Doctor_Stoppage)
 SELECT TOP 10 WITH TIES
 * FROM KO
 ORDER BY [Total wins by KO/TKO] DESC
+
+-- Most wins by Submission.
+WITH S AS (
+SELECT
+R_fighter AS Fighter,
+max(R_win_by_Submission) AS [Total wins by Submission]
+FROM [dbo].[123]
+GROUP BY R_fighter, R_win_by_Submission
+UNION
+SELECT
+B_fighter AS Fighter,
+max(B_win_by_Submission) AS [Total wins by Submission]
+FROM [dbo].[123]
+GROUP BY B_fighter, B_win_by_Submission)
+SELECT TOP 10 WITH TIES
+Fighter,
+MAX([Total wins by Submission]) AS [Wins by submission]
+FROM S
+GROUP BY Fighter
+order by MAX([Total wins by Submission]) DESC
