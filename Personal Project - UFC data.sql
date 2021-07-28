@@ -68,7 +68,7 @@ GROUP BY wr.R_FIGHTER,WR.wins, wr.loses, wr.draws
 HAVING (WINS + LOSES + DRAWS) >10
 ORDER BY [Prc Won] DESC
 -- Obviously, It's Kamaru Usman and Khabib Nurmagomedov who won all their fights so far!
--- And since Khabib has decided to retire with 29/0 (13/0 in UFC) record, we can assume that The Nigerian Nightmare is the TOP OF THE TOP right now.
+-- And since Khabib has decided to retire with 29/0 (13/0 in UFC) record, we can assume that The Nigerian Nightmare is TOP OF THE TOP right now.
 
 -- Now, let's find out who has the longest winning streak in the UFC.
 WITH L AS (                                     
