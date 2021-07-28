@@ -187,3 +187,11 @@ MAX([Total wins by Submission]) AS [Wins by submission]
 FROM S
 GROUP BY Fighter
 order by MAX([Total wins by Submission]) DESC
+
+-- Let's look closer at each weightclass
+SELECT
+weight_class,
+COUNT(*) [No. of fights]
+FROM [dbo].[123]
+GROUP BY weight_class
+ORDER BY [No. of fights] desc
