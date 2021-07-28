@@ -108,3 +108,62 @@ group BY R_fighter, TMP
 ORDER BY STREAK DESC
 -- It's Anderson Silva! Even though lately he's having some rough time, being undefeated for 16 consecutive fights is something clearly out of this world.
 
+-- Most wins by decision.
+WITH D AS (
+SELECT
+R_fighter as Fighter,
+max(R_win_by_Decision_Split + R_win_by_Decision_Majority + R_win_by_Decision_Unanimous) AS [Wins by decision]
+FROM [dbo].[123]
+GROUP BY R_fighter
+UNION
+SELECT
+B_fighter as Fighter,
+max(b_win_by_Decision_Split + B_win_by_Decision_Majority + B_win_by_Decision_Unanimous) AS [Wins by decision]
+FROM [dbo].[123]
+group by B_fighter)
+select * from D
+ORDER BY [Wins by decision] DESC
+
+-- Most wins by decision.
+WITH D AS (
+SELECT
+R_fighter as Fighter,
+max(R_win_by_Decision_Split + R_win_by_Decision_Majority + R_win_by_Decision_Unanimous) AS [Wins by decision],
+R_win_by_Decision_Majority AS [Wins by majority decision],
+R_win_by_Decision_Unanimous AS [Wins by unanimous decision],
+R_win_by_Decision_Split AS [Wins by split decision]
+FROM [dbo].[123]
+GROUP BY R_fighter, R_win_by_Decision_Majority, R_win_by_Decision_Unanimous, R_win_by_Decision_Split
+UNION
+SELECT
+B_fighter as Fighter,
+max(b_win_by_Decision_Split + B_win_by_Decision_Majority + B_win_by_Decision_Unanimous) AS [Wins by decision],
+b_win_by_Decision_Majority AS [Wins by majority decision],
+b_win_by_Decision_Unanimous AS [Wins by unanimous decision],
+b_win_by_Decision_Split AS [Wins by split decision]
+FROM [dbo].[123]
+group by B_fighter, b_win_by_Decision_Majority, B_win_by_Decision_Unanimous, b_win_by_Decision_Split)
+select TOP 10 WITH TIES 
+* from D
+ORDER BY [Wins by decision] DESC, [Wins by majority decision] DESC, [Wins by unanimous decision] DESC, [Wins by split decision] DESC
+
+-- Most wins by KO/TKO.
+WITH KO AS (
+SELECT
+R_fighter AS Fighter,
+max(R_win_by_KO_TKO + R_win_by_TKO_Doctor_Stoppage) AS [Total wins by KO/TKO],
+R_win_by_KO_TKO AS [Wins by KO/TKO],
+R_win_by_TKO_Doctor_Stoppage AS [Wins by doctor stoppage]
+FROM [dbo].[123]
+GROUP BY R_fighter, R_win_by_KO_TKO, R_win_by_TKO_Doctor_Stoppage
+UNION
+SELECT
+B_fighter AS Fighter,
+max(B_win_by_KO_TKO + B_win_by_TKO_Doctor_Stoppage) AS [Total wins by KO/TKO],
+B_win_by_KO_TKO AS [Wins by KO/TKO],
+B_win_by_TKO_Doctor_Stoppage AS [Wins by doctor stoppage]
+FROM [dbo].[123]
+GROUP BY B_fighter, B_win_by_KO_TKO, B_win_by_TKO_Doctor_Stoppage)
+SELECT TOP 10 WITH TIES
+* FROM KO
+ORDER BY [Total wins by KO/TKO] DESC
