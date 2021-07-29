@@ -245,3 +245,37 @@ FROM [dbo].[123]
 GROUP BY weight_class
 ORDER BY Weight desc
 
+-- Top 5 venues that have hosted the most number of UFC events
+SELECT TOP 5
+[location],
+COUNT(*) AS [Number of Events]
+FROM [dbo].[123]
+GROUP BY [location]
+ORDER BY [Number of Events] DESC
+
+-- Top 5 venues that have hosted the most number of UFC events outside of the USA
+SELECT TOP 5
+[location],
+COUNT(*) AS [Number of Events]
+FROM [dbo].[123]
+WHERE RIGHT([location],3) <> 'USA'
+GROUP BY [location]
+ORDER BY [Number of Events] DESC
+
+-- Top 5 venues that have hosted the most number title bout fights
+SELECT TOP 15
+[location],
+COUNT(*) AS [Number of title bout fights]
+FROM [dbo].[123]
+WHERE title_bout = 1
+GROUP BY [location]
+ORDER BY [Number of title bout fights] DESC
+
+-- Top 5 luckiest venues for title challengers
+SELECT TOP 5
+[location],
+COUNT(*) AS [Number of Events]
+FROM [dbo].[123]
+WHERE title_bout = 1 and winner = 'Blue' 
+GROUP BY [location]
+ORDER BY [Number of Events] DESC
