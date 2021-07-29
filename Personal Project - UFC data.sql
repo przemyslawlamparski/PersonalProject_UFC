@@ -70,6 +70,24 @@ ORDER BY [Prc Won] DESC
 -- Obviously, It's Kamaru Usman and Khabib Nurmagomedov who won all their fights so far!
 -- And since Khabib has decided to retire with 29/0 (13/0 in UFC) record, we can assume that The Nigerian Nightmare is TOP OF THE TOP right now.
 
+-- Blue side win%, Red side win%, Draw % per year since 2010
+WITH C AS (
+SELECT
+YEAR(date) AS [year],
+COUNT(CASE WHEN WINNER = 'Blue' THEN 1 END) AS Blue,
+COUNT(CASE WHEN WINNER = 'Red' THEN 1 END) AS Red,
+COUNT(CASE WHEN WINNER = 'Draw' THEN 1 END) AS Draw
+FROM [dbo].[123]
+GROUP BY YEAR(DATE)
+) SELECT
+*,
+CAST(((Blue * 1.00) / ((Blue * 1.00)+(Red*1.00)+(Draw * 1.00))*100) AS numeric(10,2)) AS 'Blue win %',
+CAST(((Red * 1.00) / ((Blue * 1.00)+(Red*1.00)+(Draw * 1.00))*100) AS numeric(10,2)) AS 'Red win %',
+CAST(((Draw * 1.00) / ((Blue * 1.00)+(Red*1.00)+(Draw * 1.00))*100) AS numeric(10,2)) AS 'Draw %'
+FROM C
+WHERE [year] >= 2010
+ORDER by [year] DESC
+
 -- Now, let's find out who has the longest winning streak in the UFC.
 WITH L AS (                                     
 SELECT                                          
@@ -279,3 +297,4 @@ FROM [dbo].[123]
 WHERE title_bout = 1 and winner = 'Blue' 
 GROUP BY [location]
 ORDER BY [Number of Events] DESC
+
