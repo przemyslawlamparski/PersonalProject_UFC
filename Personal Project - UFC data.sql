@@ -1,6 +1,5 @@
 -- PERSONAL PROJECT
 -- ANALYSIS OF UFC DATA FOR THE PERIOD OF March, 1994 - March, 2021
--- v0.01 27/07/2021
 
 -- Let's explore the data, find out fighter's most basic statistics - Wins | Loses | Draws | Win % | Loss %
 
@@ -298,3 +297,46 @@ WHERE title_bout = 1 and winner = 'Blue'
 GROUP BY [location]
 ORDER BY [Number of Events] DESC
 
+-- Fighters stance popularity
+WITH S AS (
+SELECT
+B_Stance AS stance
+FROM [dbo].[123]
+UNION ALL
+SELECT
+R_Stance
+FROM [dbo].[123])
+SELECT 
+stance,
+count(*) AS Popularity,
+CAST((COUNT(*) *1.00 / (SELECT COUNT(*) FROM S WHERE STANCE IS NOT NULL) * 1.00)*100 AS NUMERIC(5,2)) as [Popularity %]
+FROM S 
+WHERE STANCE IS NOT NULL
+GROUP BY stance
+ORDER BY Popularity DESC
+
+-- Oldboys vs Youngsters
+WITH AGE_DIFF AS (
+SELECT
+R_fighter,
+B_fighter,
+CASE WHEN Winner = 'Blue' THEN R_fighter ELSE B_fighter END AS [Winner],
+location,
+Referee,
+date,
+B_age - R_age AS [Age difference],
+weight_class,
+RANK() OVER(ORDER BY R_age - B_age) rnk
+FROM [dbo].[123]
+WHERE R_age IS NOT NULL AND B_age IS NOT NULl)
+SELECT
+R_fighter,
+B_fighter,
+Winner,
+Location,
+Referee,
+Date,
+[Age difference],
+weight_class AS [Weight class]
+FROM AGE_DIFF
+WHERE rnk <= 3
