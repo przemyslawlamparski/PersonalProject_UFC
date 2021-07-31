@@ -250,7 +250,7 @@ COUNT(*) [No. of fights]
 FROM [dbo].[123]
 GROUP BY weight_class
 ORDER BY [No. of fights] desc
--- It appears that welterweight and lightweight is the most popular. Note that fighter during his/her career can fight in multiple categories.
+-- It appears that welterweight and lightweight is the most popular. Note that fighter during their career can fight in multiple categories.
 
 -- Basic data of average fighter in each class. 
 SELECT
