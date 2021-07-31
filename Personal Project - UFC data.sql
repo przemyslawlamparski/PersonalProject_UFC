@@ -315,7 +315,7 @@ WHERE STANCE IS NOT NULL
 GROUP BY stance
 ORDER BY Popularity DESC
 
--- Oldboys vs Youngsters
+-- Oldboys vs Youngsters, fights with biggest age gaps.
 WITH AGE_DIFF AS (
 SELECT
 R_fighter,
