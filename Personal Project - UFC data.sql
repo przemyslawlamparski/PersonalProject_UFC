@@ -256,9 +256,11 @@ ORDER BY [No. of fights] desc
 SELECT
 weight_class,
 CAST(AVG(R_age + B_age) / 2 AS numeric(4,2)) AS Age,
-CAST(AVG(R_Height_cms + B_Weight_lbs) / 2 AS numeric (5,2)) AS Height,
-CAST(AVG((R_Weight_lbs / 2.205) + (B_Weight_lbs / 2.205)) / 2.0 AS numeric(5,2)) AS Weight
+CAST(AVG(R_Height_cms + B_Height_cms) / 2 AS numeric (5,2)) AS Height,
+CAST(AVG((R_Weight_lbs / 2.205) + (B_Weight_lbs / 2.205)) / 2.0 AS numeric(5,2)) AS Weight,
+CAST(AVG(R_reach_cms + B_reach_cms) / 2.0 AS numeric(5, 2)) AS Reach
 FROM [dbo].[123]
+WHERE weight_class != 'Openweight' AND weight_class != 'Catchweight'
 GROUP BY weight_class
 ORDER BY Weight desc
 
