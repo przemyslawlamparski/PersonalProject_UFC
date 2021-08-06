@@ -342,3 +342,36 @@ Date,
 weight_class AS [Weight class]
 FROM AGE_DIFF
 WHERE rnk <= 3
+
+-- Let's take a look at Polish champ Jan Błachowicz and his fight against Dominick Reyes
+SELECT
+R_fighter AS [Fighter],
+CAST(R_wins AS Varchar(2)) + '/' + CAST(R_losses AS Varchar(2)) + '/' + CAST(R_draw AS Varchar(2)) AS [Record],
+R_age AS Age,
+R_Stance AS Stance,
+R_Height_cms AS Height,
+CAST((R_Weight_lbs / 2.205) AS NUMERIC(4,2)) AS Weight,
+R_Reach_cms AS Reach,
+R_avg_TOTAL_STR_landed AS [Total Strikes],
+R_avg_SIG_STR_landed AS [Sig Strikes],
+R_avg_TD_landed AS [Takedowns anded],
+R_avg_CTRL_time_seconds [Ground Control Time],
+R_avg_SUB_ATT [Submission attempts]
+FROM [dbo].[123] AS u 
+WHERE u.R_fighter = 'Dominick Reyes' AND u.B_fighter = 'Jan Blachowicz'
+UNION
+SELECT
+B_fighter + ' (W)',
+CAST(B_wins AS Varchar(2)) + '/' + CAST(B_losses AS Varchar(2)) + '/' + CAST(B_draw AS Varchar(2)),
+B_age,
+B_Stance,
+B_Height_cms,
+CAST((B_Weight_lbs / 2.205) AS NUMERIC(4,2)),
+B_Reach_cms,
+B_avg_TOTAL_STR_landed,
+B_avg_SIG_STR_landed,
+B_avg_TD_landed,
+B_avg_CTRL_time_seconds,
+B_avg_SUB_ATT
+FROM [dbo].[123] AS u 
+WHERE u.R_fighter = 'Dominick Reyes' AND u.B_fighter = 'Jan Blachowicz'
