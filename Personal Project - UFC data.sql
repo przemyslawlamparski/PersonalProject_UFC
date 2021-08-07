@@ -243,6 +243,16 @@ FROM SUB
 GROUP BY Fighter
 ORDER BY [Total wins by Submission] DESC, Fighter;
 
+-- Most common sub method
+SELECT
+Finish_details,
+COUNT(*) AS sub
+FROM [dbo].[ufc-master]
+WHERE Finish = 'SUB'AND finish_details IS NOT NULL
+GROUP BY Finish_details
+ORDER BY sub desc;
+-- 1st place Rear Naked Choke with over twice as many subs than 2nd Guillotine choke. Classic armbar is the 3rd most popular submission method. 
+
 -- Let's look closer at each weightclass
 SELECT
 weight_class,
